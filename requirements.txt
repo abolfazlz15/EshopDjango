@@ -1,0 +1,11 @@
+asgiref==3.5.2
+backports.zoneinfo==0.2.1
+Django==4.0.4
+django-ckeditor==6.4.2
+django-cleanup==6.0.0
+django-js-asset==2.0.0
+django-render-partial==0.4
+django-widget-tweaks==1.4.12
+Pillow==9.1.1
+sqlparse==0.4.2
+tzdata==2022.1

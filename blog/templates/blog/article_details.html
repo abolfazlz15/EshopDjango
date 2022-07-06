@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ articles.title }}{% endblock %}
+
+{% block body %}
+
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">{{ articles.title }}</h2>
+                        <div class="single-blog-post">
+                            <h3>{{ articles.category.first }}</h3>
+                            <div class="post-meta">
+                                <ul>
+                                    <li><i class="fa fa-user"></i><a href="{% url 'blog:author' articles.author.username %}">{{ articles.author }}</a></li>
+                                    </li>
+                                    <li><i class="fa fa-clock-o"></i>{{ articles.j_publish.year }}/{{ articles.j_publish.month }}/{{ articles.j_publish.day }}</li>
+                                    <li><i class="fa fa-calendar"></i>{{ articles.j_publish.hour }}:{{ articles.j_publish.minute }}</li>
+                                </ul>
+                                <span>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </span>
+                            </div>
+                            <a href="">
+                                <img src="{{ articles.image.url }}" alt="">
+                            </a>
+                            <p>{{ articles.description }}</p>
+
+                                <div class="pager-area">
+                                    <ul class="pager pull-left">
+                                        {% if articles.get_previous_by_published %}
+                                            <li><a href="{{ articles.get_previous_by_published.get_absolute_url }}">قبلی</a></li>
+                                        {% endif %}
+                                        {% if articles.get_next_by_published %}
+                                            <li><a href="{{ articles.get_next_by_published.get_absolute_url }}">بعدی</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                        </div>
+                    </div>
+                    <!--/blog-post-area-->
+
+                    <div class="rating-area">
+                        <ul class="ratings">
+                            <li class="rate-this">به این مطلب امتیـاز دهیـد :</li>
+                            <li>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="color">( {{ count_of_comment_article }} نظـر )</li>
+                        </ul>
+
+                        <!-- Tags -->
+                        <ul class="tag">
+                            <li>برچسب :</li>
+                            <li><a class="color" href="">برچسب 1</a></li>
+                        </ul>
+                        <!-- /Tags -->
+
+                    </div>
+                    <!--/rating-area-->
+                    {% if request.user.is_authenticated %}
+                        <div class="replay-box">
+                            <form method="post" id="comment">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="text-area">
+                                            <div class="blank-arrow">
+                                                <label>متن پیام</label>
+                                            </div>
+                                            <span>*</span>
+                                            <textarea name="body" rows="11"></textarea>
+
+                                            <button class="btn btn-primary" type="submit">ارسـال نظـر</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h2>نظـر خود را بنویسیـد</h2>
+
+                                        <div class="blank-arrow">
+                                            <label>آدرس ایمیـل</label>
+                                        </div>
+                                        <span>*</span>
+                                        <input type="email" name="email" placeholder="ایمیـل شما ...">
+                                        <input type="hidden" id="parent_id" name="parent_id">
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="#" class="btn btn-danger" style="margin-top: 8px"> برای ثبت نظر لطفا وارد حساب خود
+                            شوید</a>
+                    {% endif %}
+                    <!--Comments-->
+
+                    <div class="response-area">
+                        <h2>نظرات ({{ count_of_comment_article }})</h2>
+                        <ul class="media-list">
+                            {% for comment in articles.comments.all %}
+                                {% if comment.parent == None %}
+                                    <li class="media">
+                                        <a class="pull-right" href="#">
+                                            <img class="media-object" src="{% static 'images/blog/Customer.jpg' %}"
+                                                 alt="">
+                                        </a>
+                                        <div class="media-body">
+                                            <ul class="sinlge-post-meta">
+                                                <li><i class="fa fa-user"></i>{{ comment.user }}</li>
+                                                <li><i class="fa fa-clock-o"></i>{{ comment.j_publish.minute }}
+                                                    : {{ comment.j_publish.hour }}</li>
+                                                <li>
+                                                    <i
+                                                            class="fa fa-calendar"></i>{{ comment.j_publish.year }}/{{ comment.j_publish.month }}/{{ comment.j_publish.day }}
+                                                </li>
+                                            </ul>
+                                            <p>{{ comment.body }}</p>
+                                            <button onclick="set_value({{ comment.id }})" class="btn btn-primary">
+                                                reply
+                                            </button>
+                                        </div>
+                                    </li>
+                                    {% for reply in comment.replies.all %}
+                                        <li class="media second-media">
+                                            <a class="pull-right" href="#">
+                                                <img class="media-object" src="{% static 'images/blog/Customer.jpg' %}"
+                                                     alt="">
+                                            </a>
+                                            <div class="media-body">
+                                                <ul class="sinlge-post-meta">
+                                                    <li><i class="fa fa-user"></i>{{ reply.user }}</li>
+                                                    <li><i class="fa fa-clock-o"></i>{{ reply.j_publish.minute }}
+                                                        : {{ reply.j_publish.hour }}</li>
+                                                    <li>
+                                                        <i
+                                                                class="fa fa-calendar"></i>{{ reply.j_publish.year }}/{{ reply.j_publish.month }}/{{ reply.j_publish.day }}
+                                                    </li>
+                                                </ul>
+                                                <p>{{ reply.body }}</p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                    <!--/Response-area-->
+
+                    <!--/Repaly Box-->
+                </div>
+                <!-- sidebar -->
+                {% include 'include/blog_sidebar.html' %}
+
+            </div>
+        </div>
+    </section>
+    <script>
+        function set_value(id) {
+            document.getElementById('parent_id').value = id;
+            window.location.href = '#comment'
+
+        }
+    </script>
+{% endblock %}

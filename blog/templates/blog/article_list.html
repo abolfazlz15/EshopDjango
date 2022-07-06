@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">آخریـن اخبـار</h2>
+
+                        {% for article in articles %}
+                            <div class="single-blog-post">
+                                <h3>{{ article.title }}</h3>
+                                <div class="post-meta">
+                                    <ul>
+                                        <li><i class="fa fa-user"></i><a href="{% url 'blog:author' article.author.username %}">{{ article.author }}</a></li>
+                                        <li><i class="fa fa-clock-o"></i>{{ article.j_publish.year }}/{{ article.j_publish.month }}/{{ article.j_publish.day }}</li>
+                                        <li><i class="fa fa-calendar"></i>{{ article.j_publish.hour }}:{{ article.j_publish.minute }}</li>
+                                    </ul>
+                                    <span>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-half-o"></i>
+                                    </span>
+                                </div>
+                                <a href="">
+                                    <img src="{{ article.image.url }}" alt="{{ article.title }}">
+                                </a>
+                                <p>
+                                    {{ article.description|truncatewords:150 }}
+                                </p>
+                                <a class="btn btn-primary" href="{{ article.get_absolute_url }}">ادامـه مطلب</a>
+                            </div>
+                        {% endfor %}
+                        
+                        {% if articles.has_other_pages %}
+                        <div class="pagination-area">
+                            <ul class="pagination">
+                                {% if articles.has_previous %}
+                                    <li><a href="?page=1"><i
+                                            class="fa fa-angle-double-left"></i></a></li>
+                                {% endif %}
+                                {% for page in articles.paginator.page_range %}
+                                    {% if articles.number == page %}
+                                        <li><a href="?page={{ page }}" class="active">{{ page }}</a></li>
+                                    {% else %}
+                                        <li><a href="?page={{ page }}">{{ page }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if articles.has_next %}
+                                    <li><a href="?page={{ articles.paginator.num_pages }}"><i
+                                            class="fa fa-angle-double-right"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+
+                {% include 'include/blog_sidebar.html' %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+<!--/Footer-->
+
+
