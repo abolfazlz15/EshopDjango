@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.html import format_html
 from django.utils import timezone
 # from extensions.utils import jalali_converter
 
@@ -70,16 +71,22 @@ class Article(models.Model):
     def __str__(self):
         return f'{self.title} - {self.description[:30]}'
 
-    def j_publish(self):
+    def j_publish(self): # convert US time to IR     
         time = timezone.localtime(self.created_date)
         return time
+
+    def showImage(self): # for show image in admin panel
+        if self.image:
+            return format_html(f'<img src="{self.image.url}" alt="" width="50px" height="50px">')
+        else:
+            return format_html(f'<h4>مقاله {self.title} تصویر ندارد</h4>')
+    showImage.short_description = 'تصویر'
 
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments', verbose_name='مقاله')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name='کاربر')
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='replies',
-                               verbose_name='زیر مجموعه')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='replies',verbose_name='زیر مجموعه')
     body = models.TextField(verbose_name='متن')
     email = models.EmailField(verbose_name='ایمیل', null=True, blank=True)
     status = models.BooleanField(default=False, verbose_name='وضعیت')

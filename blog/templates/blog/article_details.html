@@ -65,7 +65,10 @@
                         <!-- Tags -->
                         <ul class="tag">
                             <li>برچسب :</li>
-                            <li><a class="color" href="">برچسب 1</a></li>
+                        {% for i in articles.tag.all %}
+                            <li><a class="color" href="">{{ i.title }}</a></li>
+                            <li><a class="color" href="">/</a></li>
+                            {% endfor %}
                         </ul>
                         <!-- /Tags -->
 
@@ -110,7 +113,7 @@
                     <div class="response-area">
                         <h2>نظرات ({{ count_of_comment_article }})</h2>
                         <ul class="media-list">
-                            {% for comment in articles.comments.all %}
+                            {% for comment in comment %}
                                 {% if comment.parent == None %}
                                     <li class="media">
                                         <a class="pull-right" href="#">
@@ -134,6 +137,7 @@
                                         </div>
                                     </li>
                                     {% for reply in comment.replies.all %}
+                                        {% if reply.status == True %}
                                         <li class="media second-media">
                                             <a class="pull-right" href="#">
                                                 <img class="media-object" src="{% static 'images/blog/Customer.jpg' %}"
@@ -152,6 +156,7 @@
                                                 <p>{{ reply.body }}</p>
                                             </div>
                                         </li>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             {% endfor %}

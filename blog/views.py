@@ -18,6 +18,11 @@ def articleList(request):
 
 def articleDetail(request, slug):
     article = get_object_or_404(Article.objects.filter(status=True), slug=slug)  # get object from database
+    comment = article.comments.filter(status=True)
+
+
+    
+    # test = article.replies.filter(status=True)
     count_of_comment_article = article.comments.count()  # getting number of comments
     
     if request.method == 'POST':
@@ -31,7 +36,9 @@ def articleDetail(request, slug):
     else:
         form = CommentFrom()  # if request type == GET sending null from
     context = {
+        # 'test': test,
         'articles': article,
+        'comment': comment,
         'count_of_comment_article': count_of_comment_article,
         'form': form,
     }
