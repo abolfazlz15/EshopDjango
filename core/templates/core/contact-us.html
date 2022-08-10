@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div id="contact-page" class="container">
+	<div class="bg">
+		<div class="row">
+			<div class="container">
+				<div class="col-sm-12" style="overflow: hidden; margin-bottom: 40px">
+					<h2 class="title text-center">تمـاس با مـا</h2>
+					<div id="gmap" class="contact-map">
+						<img src="{% static 'images/home/Map.jpg' %}" alt="Map" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="contact-form">
+					<h2 class="title text-center">با ما در ارتباط باشیـد</h2>
+					<div class="status alert alert-success" style="display: none"></div>
+					<form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+						<div>
+							<p>
+								{{ form.errors }}
+							</p>
+						</div>
+						{% csrf_token %}
+						<div class="form-group col-md-6">
+							{{ form.name }}
+						</div>
+						<div class="form-group col-md-6">
+							{{ form.email }}
+						</div>
+						<div class="form-group col-md-12">
+							{{ form.subject }}
+						</div>
+						<div class="form-group col-md-12">
+							{{form.message}}
+						</div>      
+						<div class="form-group col-md-12">
+							<input type="submit" name="submit" class="btn btn-primary pull-right" value="ارسـال">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="contact-info">
+					<h2 class="title text-center">اطلاعات تماس</h2>
+					<address>
+						<p>گـروه تکنوگـرافی 1614</p>
+						<p>ایـران - آذربایجـان غربـی - خـوی</p>
+						<p>مجتـمع تجـاری تفریحـی شمس - طبـقه 2 - پلاک 54</p>
+						<p>تلفن تماس : 80 21 24 36 044</p>
+						<p>فکس : 80 21 24 36 044</p>
+						<p style="font-family: tahoma;">ایمیـل : info@1614GP.ir</p>
+					</address>
+					<div class="social-networks">
+						<h2 class="title text-center">شبکـه های اجتـماعی</h2>
+						<span class="socials-share share">
+							<ul>
+								<a href="#">
+									<li>
+										<label>بلـه</label>
+										<img src="{% static 'images/product-details/Bale.png' %}" />
+									</li>
+								</a>
+								<a href="#">
+									<li>
+										<label>سـروش</label>
+										<img src="{% static 'images/product-details/Soroush.png' %}" />
+									</li>
+								</a>
+								<a href="#">
+									<li>
+										<label>اینستاگرام</label>
+										<img src="{% static 'images/product-details/Instagram.png' %}" />
+									</li>
+								</a>
+							</ul>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/#contact-page-->
+
+{% endblock %}

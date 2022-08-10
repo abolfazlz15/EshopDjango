@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'account.apps.AccountConfig',
     'product.apps.ProductConfig',
+    'core.apps.CoreConfig',
 
     # helper apps
     'ckeditor',

@@ -76,8 +76,8 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments', verbose_name='محصول')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name='کاربر')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comment', verbose_name='محصول')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment', verbose_name='کاربر')
     body = models.TextField(verbose_name='متن')
     email = models.EmailField(verbose_name='ایمیل', null=True, blank=True)
     status = models.BooleanField(default=False, verbose_name='وضعیت')
